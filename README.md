@@ -31,4 +31,4 @@ A good start to Process Hollowing [here](http://www.rohitab.com/discuss/topic/41
 ## License
 See the [LICENSE](LICENSE) file for details
 
-## This program was written only as a personal challenge. I don't assume any responsibility about how you will use it.
+## This program was written only as a personal challenge.<br/>I don't assume any responsibility about how you will use it.
