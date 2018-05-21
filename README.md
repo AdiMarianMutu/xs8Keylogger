@@ -25,6 +25,9 @@ http://www.wischik.com/lu/programmer/zip_utils.html
 base64 | René Nyffenegger
 ```
 https://renenyffenegger.ch/notes/development/Base64/Encoding-and-decoding-base-64-with-cpp
+## Warning
+I have tested it only launching with the Process Hollowing technique, so I don't know if is FUD if you will use it as a "plain" exe<br/>
+A good start to Process Hollowing [here](http://www.rohitab.com/discuss/topic/41529-stealthier-process-hollowing-code/)
 ## License
 see the [LICENSE](LICENSE) file for details
 
