@@ -14,8 +14,8 @@ Stealth Low-Level Hook Keylogger (Also with screenshots!)
 ●Reads the clipboard when CTRL+C and CTRL+V are pressed (No "Copy" mouse support)
  <br /><br />
 ### Prerequisites
-You need to use this small command to can launch the VBS payload who will launch the "sendEmail.vbs" file<br />
-[MSHTA VBScript Download & Execute](src/sendEmail.vbs)
+You need to use this small command to can launch the VBS payload who will launch the [sendEmail.vbs](src/sendEmail.vbs) file<br />
+[MSHTA VBScript Download & Execute](https://github.com/Xxshark888xX/MSHTA-VBS-download-and-execute)
  <br /><br />
 ```
 zip.h  | Lucian Wischik
