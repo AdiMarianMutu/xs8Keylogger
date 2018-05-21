@@ -24,6 +24,6 @@ base64 | René Nyffenegger
 ```
 https://renenyffenegger.ch/notes/development/Base64/Encoding-and-decoding-base-64-with-cpp
 ## License
-see the [LICENSE.md](LICENSE.md) file for details
+see the [LICENSE](LICENSE) file for details
 
 ## This program was written only as a personal challenge. I don't assume any responsibility about how you will use it.
