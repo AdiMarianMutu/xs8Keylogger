@@ -18,7 +18,7 @@ You need to use this small command to can launch the VBS payload who will launch
 [MSHTA VBScript Download & Execute](https://github.com/Xxshark888xX/MSHTA-VBS-download-and-execute)
  <br /><br />
 ```
-zip.h  | Lucian Wischik
+zip    | Lucian Wischik
 ```
 http://www.wischik.com/lu/programmer/zip_utils.html
 ```
