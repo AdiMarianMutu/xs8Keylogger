@@ -29,6 +29,6 @@ https://renenyffenegger.ch/notes/development/Base64/Encoding-and-decoding-base-6
 I have tested it only launching with the Process Hollowing technique, so I don't know if the exe is FUD or not.<br/>
 A good start to Process Hollowing [here](http://www.rohitab.com/discuss/topic/41529-stealthier-process-hollowing-code/)
 ## License
-see the [LICENSE](LICENSE) file for details
+See the [LICENSE](LICENSE) file for details
 
 ## This program was written only as a personal challenge. I don't assume any responsibility about how you will use it.
