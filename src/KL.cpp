@@ -31,6 +31,7 @@
 	This will make the program to run in background without a GUI
 	
 	You need also to add File.h and _String.h to your project.
+	Don't compile with Unicode support!
 		 
 	==========================================================================================================
 	
