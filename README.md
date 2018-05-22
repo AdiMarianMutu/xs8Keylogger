@@ -5,7 +5,7 @@ Stealth Low-Level Hook Keylogger (Captures also the victim screen!)
 ## Features
 ●Compresses everything in a *zip archive* (you can also set a password)
 <br/>
-●The archive is sended to you by e-mail using a **trusted Windows** process (*mshta.exe*)
+●The archive will be sent to you by e-mail using a **trusted Windows** process (*mshta.exe*)
 <br/>
 ●*Screenshot* of the *screen* when the left mouse button is pressed
 <br/>
