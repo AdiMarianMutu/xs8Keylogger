@@ -24,7 +24,7 @@
 	
 	[HOW TO SETUP]
 	
-	Ad every file to your project.
+	Add every file to your project.
 	
 	1) Go to the project properties
 	2) Linker
