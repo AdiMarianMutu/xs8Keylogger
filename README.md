@@ -1,6 +1,6 @@
 # xs8Keylogger
 
-Stealth Low-Level Hook Keylogger (Also with screenshots!)
+Stealth Low-Level Hook Keylogger (Captures also the victim screen!)
 
 ## Features
 ●Compresses everything in a zip archive (you can also set a password) and send the archive to you by e-mail using a trusted Windows process (mshta.exe)<br/><br/>
