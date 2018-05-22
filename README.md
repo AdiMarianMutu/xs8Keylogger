@@ -29,7 +29,7 @@ http://www.wischik.com/lu/programmer/zip_utils.html
 https://renenyffenegger.ch/notes/development/Base64/Encoding-and-decoding-base-64-with-cpp
 <br/><br/>
 ## Warning
-I have tested it only launching with the **Process Hollowing** technique, so I don't know if the exe is FUD or not.<br/>
+I have tested it only *injecting* with the **Process Hollowing** technique, so I don't know if the exe is FUD or not.<br/>
 A good start point to Process Hollowing [here](http://www.rohitab.com/discuss/topic/40262-dynamic-forking-process-hollowing/)
 ## License
 See the [LICENSE](LICENSE) file for details
