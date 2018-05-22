@@ -37,7 +37,7 @@
 	[!!!]
 	
 	This program was written only as a personal challenge.
-	I don't assume any responsibility about how you will use it.
+	I don't assume any responsibility about how you will use.
 	
 	==========================================================================================================
 	*Built using Visual Studio 2017 and tested only on Windows 7/10 x64.
